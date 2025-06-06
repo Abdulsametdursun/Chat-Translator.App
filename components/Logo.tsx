@@ -11,7 +11,7 @@ function Logo() {
           <Image
             priority
             src={LogoImage}
-            alt='Anychat logo'
+            alt='logo'
             className='rounded-full dark:filter dark:invert'
           />
         </AspectRatio>

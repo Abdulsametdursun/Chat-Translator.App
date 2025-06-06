@@ -30,18 +30,18 @@ function CreateChatButton({ isLarge }: { isLarge?: boolean }) {
       duration: 3000,
     });
 
-    // We need to get the users current chats to check if they're about to exceed the PRO plan
+    // Chat limit check for FREE users — commented for beta
+    /*
     const chats = (await getDocs(chatMembersCollectionGroupRef(session.user.id))).docs.map((doc) =>
-      doc.data(),
+      doc.data()
     );
 
-    // check if the user is about to exceed the PRO plan which is 3 chats
     const isPro = subscription?.role === 'pro' && subscription.status === 'active';
     if (!isPro && chats.length >= 3) {
       toast({
         title: 'Free plan limit exceeded',
         description:
-          "You've'exceeded the limit of chats for the FREE plan. Please upgrade to PRO to continue adding users to chats!",
+          "You've exceeded the limit of chats for the FREE plan. Please upgrade to PRO to continue adding users to chats!",
         variant: 'destructive',
         action: (
           <ToastAction altText='Upgrade' onClick={() => router.push('/register')}>
@@ -51,9 +51,9 @@ function CreateChatButton({ isLarge }: { isLarge?: boolean }) {
       });
 
       setLoading(false);
-
       return;
     }
+    */
 
     const chatId = uuidv4();
     await setDoc(addChatRef(chatId, session.user.id), {
@@ -94,8 +94,15 @@ function CreateChatButton({ isLarge }: { isLarge?: boolean }) {
 
   return (
     <div>
-      <Button size={'icon'} variant={'ghost'} onClick={createNewChat}>
-        {loading ? <LoadingSpinner /> : <MessageSquarePlusIcon />}
+      <Button variant='ghost' className='flex items-center gap-2 px-3' onClick={createNewChat}>
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <MessageSquarePlusIcon className='w-4 h-4' />
+            <span>New Chat</span>
+          </>
+        )}
       </Button>
     </div>
   );

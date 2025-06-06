@@ -8,6 +8,7 @@ import { Session } from 'next-auth';
 import { createRef, useEffect } from 'react';
 import UserAvatar from './UserAvatar';
 import { MessageCircleIcon } from 'lucide-react';
+import TranslatedMessage from './TranslatedMessage';
 
 function ChatMessages({
   chatId,
@@ -65,8 +66,7 @@ function ChatMessages({
               </p>
 
               <div className='flex space-x-2'>
-                <p>{message.translated?.[language] || message.input}</p>
-                {!message.translated && <LoadingSpinner />}
+                <TranslatedMessage text={message.input} senderId={message.user.id} />
               </div>
             </div>
 

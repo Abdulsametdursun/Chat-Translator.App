@@ -5,7 +5,7 @@ import Image from 'next/image';
 export default function HomePage() {
   return (
     <div className=''>
-      <div className='relative isolate pt-14 dark:bg-gray-900'>
+      <div className='relative isolate pt-8 dark:bg-gray-900'>
         <div
           className='absolute inset-x-0 top-28 -z-10 transform-gpu overflow-hidden blur-3xl'
           aria-hidden='true'
@@ -38,12 +38,12 @@ export default function HomePage() {
                 >
                   Get started
                 </Link>
-                <Link
+                {/* <Link
                   href='/pricing'
                   className='text-sm font-semibold leading-6 text-gray-900 dark:text-gray-300'
                 >
                   View Pricing <span aria-hidden='true'>→</span>
-                </Link>
+                </Link> */}
               </div>
             </div>
 

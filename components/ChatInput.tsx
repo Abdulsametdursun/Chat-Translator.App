@@ -33,27 +33,19 @@ function ChatInput({ chatId }: { chatId: string }) {
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (values.input.length === 0) {
-      return;
-    }
+    if (values.input.length === 0) return;
+    if (!session?.user) return;
 
-    if (!session?.user) {
-      return;
-    }
-
-    // We need to get the users current chats to check if they're about to exceed the PRO plan
-    const messages = (await getDocs(limitedMessagesRef(chatId))).docs.map((doc) =>
-      doc.data(),
-    ).length;
-
-    // check if the user is about to exceed the PRO plan which is 20 messages inside a chat
+    // Limit for FREE users (currently disabled for NOW)
+    /*
+    const messages = (await getDocs(limitedMessagesRef(chatId))).docs.length;
     const isPro = subscription?.role === 'pro' && subscription.status === 'active';
 
     if (!isPro && messages >= 20) {
       toast({
         title: 'Free plan limit exceeded',
         description:
-          "You've'exceeded the FREE plan limit of 20 messages per chat. Upgrade to PRO for unlimited chat messages!",
+          "You've exceeded the FREE plan limit of 20 messages per chat. Upgrade to PRO for unlimited messages.",
         variant: 'destructive',
         action: (
           <ToastAction altText='Upgrade' onClick={() => router.push('/register')}>
@@ -61,12 +53,11 @@ function ChatInput({ chatId }: { chatId: string }) {
           </ToastAction>
         ),
       });
-
       return;
     }
+    */
 
-    // -----------------------------
-
+    // ✅ Save only the original message — translation handled elsewhere
     const userToStore: User = {
       id: session.user.id!,
       name: session.user.name!,
@@ -74,7 +65,7 @@ function ChatInput({ chatId }: { chatId: string }) {
       image: session.user.image || '',
     };
 
-    addDoc(messagesRef(chatId), {
+    await addDoc(messagesRef(chatId), {
       input: values.input,
       timestamp: serverTimestamp(),
       user: userToStore,

@@ -1,6 +1,6 @@
 import { CheckIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
-import CheckoutButton from './CheckoutButton';
+// import CheckoutButton from './CheckoutButton'; Uncomment to enable PRO Stripe checkout
 
 const tiers = [
   {
@@ -41,7 +41,7 @@ async function PricingCards({ redirect }: { redirect: boolean }) {
       <div className='mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2'>
         {tiers.map((tier) => (
           <div
-            key={tier.id}
+            key={tier.id ?? tier.name}
             className='flex flex-col justify-between rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10'
           >
             <div>
@@ -73,7 +73,12 @@ async function PricingCards({ redirect }: { redirect: boolean }) {
                 ))}
               </ul>
             </div>
-            {/* {tier.id && <CheckoutButton subscriptionId={tier.id} />} */}
+
+            {/* 
+              Uncomment this block below to restore CheckoutButton for Stripe 
+              {tier.id && <CheckoutButton subscriptionId={tier.id} />}
+            */}
+
             {redirect ? (
               <Link
                 href='/register'
@@ -82,7 +87,11 @@ async function PricingCards({ redirect }: { redirect: boolean }) {
                 Get started today
               </Link>
             ) : (
-              tier.id && <CheckoutButton />
+              // Restore this line for direct Stripe checkout in-app
+              // tier.id && <CheckoutButton />
+              <div className='mt-8 text-center text-sm text-gray-400'>
+                {/* PRO checkout is hidden during beta */}
+              </div>
             )}
           </div>
         ))}

@@ -58,12 +58,12 @@ function InviteUser({ chatId }: { chatId: string }) {
       description: 'Please wait while we send the invite...',
     });
 
-    // We need to get the users current chats to check if theyre about to exceed the PRO plan
+    // Chat user limit check disabled
+    /*
     const noOfUsersInChat = (await getDocs(chatMembersRef(chatId))).docs.map((doc) =>
-      doc.data(),
+      doc.data()
     ).length;
 
-    // check if the user is about to exceed the PRO plan which is 3 chats
     const isPro = subscription?.role === 'pro' && subscription.status === 'active';
 
     if (!isPro && noOfUsersInChat >= 2) {
@@ -81,6 +81,7 @@ function InviteUser({ chatId }: { chatId: string }) {
 
       return;
     }
+    */
 
     const querySnapshot = await getDocs(getUserByEmailRef(values.email));
 
@@ -144,7 +145,7 @@ function InviteUser({ chatId }: { chatId: string }) {
             <DialogHeader>
               <DialogTitle>Add User to Chat</DialogTitle>
               <DialogDescription>
-                Simply enter another users email address to invite them to this chat!{' '}
+                Simply enter another user&apos;s email address to invite them to this chat!{' '}
                 <span className='text-indigo-600 font-bold'>(Note: they must be registered)</span>
               </DialogDescription>
             </DialogHeader>

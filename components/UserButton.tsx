@@ -11,10 +11,10 @@ import {
 import { signIn, signOut } from 'next-auth/react';
 import { Button } from './ui/button';
 import { Session } from 'next-auth';
-import ManageAccountButton from './ManageAccountButton';
+// import ManageAccountButton from './ManageAccountButton';
 import { useSubscriptionStore } from '@/store/store';
 import LoadingSpinner from './loadingSpinner';
-import { StarIcon } from 'lucide-react';
+// import { StarIcon } from 'lucide-react';
 import UserAvatar from './UserAvatar';
 
 function UserButton({ session }: { session: Session | null }) {
@@ -45,20 +45,23 @@ function UserButton({ session }: { session: Session | null }) {
               </DropdownMenuItem>
             )}
 
-            {subscription?.role === 'pro' && (
-              <>
-                <DropdownMenuLabel className='text-xs flex items-center justify-center space-x-1 text-[#E935C1] animate-pulse'>
-                  <StarIcon fill='#E935C1' />
-                  <p>PRO</p>
-                </DropdownMenuLabel>
+            {/* 
+              Show Pro label and manage account button
+              {subscription?.role === 'pro' && (
+                <>
+                  <DropdownMenuLabel className='text-xs flex items-center justify-center space-x-1 text-[#E935C1] animate-pulse'>
+                    <StarIcon fill='#E935C1' />
+                    <p>PRO</p>
+                  </DropdownMenuLabel>
 
-                <DropdownMenuSeparator />
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuItem>
-                  <ManageAccountButton />
-                </DropdownMenuItem>
-              </>
-            )}
+                  <DropdownMenuItem>
+                    <ManageAccountButton />
+                  </DropdownMenuItem>
+                </>
+              )}
+            */}
 
             <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
           </DropdownMenuContent>

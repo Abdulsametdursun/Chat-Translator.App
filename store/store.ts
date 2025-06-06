@@ -23,16 +23,21 @@ interface LanguageState {
 export const useLanguageStore = create<LanguageState>()((set, get) => ({
   language: 'en',
   setLanguage: (language: LanguagesSupported) => set({ language }),
-  getLanguages: (isPro: boolean) => {
-    // If the user is pro, return all supported languages
-    if (isPro) return Object.keys(LanguagesSupportedMap) as LanguagesSupported[];
 
-    // If not pro, return only the first two languages
-    return Object.keys(LanguagesSupportedMap).slice(0, 2) as LanguagesSupported[];
+  getLanguages: (_isPro: boolean) => {
+    // All languages enabled for all users
+    // 🔒 In production, restrict for non-Pro users:
+    // if (_isPro) return Object.keys(LanguagesSupportedMap) as LanguagesSupported[];
+    // return Object.keys(LanguagesSupportedMap).slice(0, 2) as LanguagesSupported[];
+    return Object.keys(LanguagesSupportedMap) as LanguagesSupported[];
   },
-  getNotSupportedLanguages: (isPro: boolean) => {
-    if (isPro) return []; // No unsupported languages for "pro" users
-    return Object.keys(LanguagesSupportedMap).slice(2) as LanguagesSupported[]; // Excluding the first two supported languages
+
+  getNotSupportedLanguages: (_isPro: boolean) => {
+    // No language shown as locked
+    // 🔒 In production, show restricted languages to non-Pro users:
+    // if (_isPro) return [];
+    // return Object.keys(LanguagesSupportedMap).slice(2) as LanguagesSupported[];
+    return [];
   },
 }));
 
@@ -45,9 +50,12 @@ interface SubscriptionState {
 export const useSubscriptionStore = create<SubscriptionState>()((set, get) => ({
   subscription: undefined,
   setSubscription: (subscription: Subscription | null) => set({ subscription }),
+
   isPro: () => {
-    const subscription = get().subscription;
-    if (!subscription) return false;
-    return subscription.status === 'active' && subscription.role === 'pro';
+    // Always return false (no Pro access)
+    // 🔒 In production, enable this check:
+    // const subscription = get().subscription;
+    // return subscription?.status === 'active' && subscription?.role === 'pro';
+    return false;
   },
 }));
