@@ -1,5 +1,9 @@
 # 🧠 Chat-Translator App
 
+## 🔥 Live Demo
+
+![App Demo](./images/landingPage/demo.gif)
+
 A full-stack AI-powered language translation app built with **Next.js 13 App Router**, **Firebase
 Auth**, **Firestore**, **Stripe (PRO feature access)**, and **OpenAI**.  
 Designed with **ShadCN UI components** and **Tailwind CSS**.
