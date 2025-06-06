@@ -26,6 +26,7 @@ export interface Message {
   translated?: {
     [K in LanguagesSupported]?: string;
   };
+  detectedLanguage?: string;
   // ... other fields
 }
 

@@ -1,47 +1,52 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useLanguageStore } from '@/store/store';
 import { useSession } from 'next-auth/react';
-import { useLanguageStore, LanguagesSupportedMap } from '@/store/store';
+import { Message } from '@/lib/converters/Message';
 
-interface TranslatedMessageProps {
-  text: string;
-  senderId: string;
-}
-
-export default function TranslatedMessage({ text, senderId }: TranslatedMessageProps) {
-  const [translatedText, setTranslatedText] = useState<string>('');
-  const language = useLanguageStore((state) => state.language);
+function TranslatedMessage({ message }: { message?: Message }) {
+  const { language } = useLanguageStore();
   const { data: session } = useSession();
 
-  const isSender = session?.user?.id === senderId;
+  // 👇 useState always called with fallback default
+  const [translated, setTranslated] = useState<string>('');
 
   useEffect(() => {
-    if (isSender) {
-      setTranslatedText(text);
+    // 👇 Only proceed if message and input exist
+    if (!message || !message.input || !language) return;
+
+    // 👇 If already in correct language, skip translation
+    if (message.detectedLanguage === language) {
+      setTranslated(message.input);
       return;
     }
 
-    const translate = async () => {
+    // 👇 Translation fetch logic
+    async function fetchTranslation() {
       try {
         const res = await fetch('/api/translate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            text,
-            targetLanguage: LanguagesSupportedMap[language],
+            text: message.input,
+            targetLanguage: language,
           }),
         });
 
         const data = await res.json();
-        setTranslatedText(data.translatedText);
-      } catch (error) {
-        setTranslatedText('(Translation failed)');
+        setTranslated(data.translatedText || message.input);
+      } catch (err) {
+        console.error('Translation failed', err);
+        setTranslated(message.input);
       }
-    };
+    }
 
-    translate();
-  }, [text, language, isSender]);
+    fetchTranslation();
+  }, [message?.input, message?.detectedLanguage, language]);
 
-  return <span>{translatedText || '...'}</span>;
+  if (!message) return null;
+
+  return <span>{translated || message.input}</span>;
 }
+
+export default TranslatedMessage;

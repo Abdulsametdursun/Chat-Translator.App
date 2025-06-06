@@ -34,8 +34,8 @@ export function ShareLink({
 
   const linkToChat =
     process.env.NODE_ENV === 'development'
-      ? `http://${host}/chat/${chatId}`
-      : `https://${host}/chat/${chatId}`;
+      ? `http://${host}/chat/${chatId}?join=true`
+      : `https://${host}/chat/${chatId}?join=true`;
 
   // const linkToChat =
   //   process.env.NODE_ENV !== "development"

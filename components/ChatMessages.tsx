@@ -66,7 +66,7 @@ function ChatMessages({
               </p>
 
               <div className='flex space-x-2'>
-                <TranslatedMessage text={message.input} senderId={message.user.id} />
+                <TranslatedMessage message={message} />
               </div>
             </div>
 
