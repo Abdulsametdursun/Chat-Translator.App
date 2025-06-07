@@ -2,27 +2,22 @@
 
 import { useEffect, useState } from 'react';
 import { useLanguageStore } from '@/store/store';
-import { useSession } from 'next-auth/react';
 import { Message } from '@/lib/converters/Message';
 
-function TranslatedMessage({ message }: { message?: Message }) {
+function TranslatedMessage({ message }: { message: Message }) {
   const { language } = useLanguageStore();
-  const { data: session } = useSession();
-
-  // 👇 useState always called with fallback default
-  const [translated, setTranslated] = useState<string>('');
+  const [translated, setTranslated] = useState<string>(message.input);
 
   useEffect(() => {
-    // 👇 Only proceed if message and input exist
-    if (!message || !message.input || !language) return;
+    if (!message?.input || !language) return;
 
-    // 👇 If already in correct language, skip translation
+    console.log('🔍 Detected:', message.detectedLanguage, '| Target:', language);
+
     if (message.detectedLanguage === language) {
       setTranslated(message.input);
       return;
     }
 
-    // 👇 Translation fetch logic
     async function fetchTranslation() {
       try {
         const res = await fetch('/api/translate', {
@@ -42,9 +37,7 @@ function TranslatedMessage({ message }: { message?: Message }) {
     }
 
     fetchTranslation();
-  }, [message?.input, message?.detectedLanguage, language]);
-
-  if (!message) return null;
+  }, [message, message?.input, message?.detectedLanguage, language]);
 
   return <span>{translated || message.input}</span>;
 }
